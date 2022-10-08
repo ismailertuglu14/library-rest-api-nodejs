@@ -7,18 +7,23 @@ import {
   createOrUpdateBook,
   deleteBookById,
   getBookById,
+  getBookByName,
   getBooks,
   getBooksByPage,
+  getDatabaseData,
 } from "../controllers/book.controller.js";
 const router = express.Router();
-// Get all books in db
-router.get("/all", isLoggedIn, getBooks);
-// Pagination
+
+router.get("/all", isAdmin, getBooks);
+
 router.get("/", getBooksByPage);
-// Selected book
-router.get("/:id", getBookById);
-// Create or Update
+
+router.get("/getdatabasedata", getDatabaseData);
+
+router.get("/id/:id", getBookById);
+router.get("/search", getBookByName);
+
 router.post("/create", isAdmin, createOrUpdateBook);
-// Delete
 router.delete("/:id", isAdmin, deleteBookById);
+
 export default router;

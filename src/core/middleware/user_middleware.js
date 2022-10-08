@@ -31,7 +31,28 @@ export function validateRegister(req, res, next) {
   return next();
 }
 export function isAdmin(req, res, next) {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return res.status(400).json({
+      message: "Unauthorized!",
+    });
+  }
   try {
+    const { Password, ...decoded } = jwt.verify(token, "SECRETKEY");
+    console.log(decoded);
+    if (decoded.type == 1) {
+      return next();
+    } else {
+      return res
+        .status(400)
+        .json({ status: res.statusCode, message: "Unauthorized!" });
+    }
   } catch (error) {
     return res.status(400).json({
       status: res.statusCode,

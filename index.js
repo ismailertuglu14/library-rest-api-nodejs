@@ -5,12 +5,14 @@ import bookRoutes from "./src/product/book/routes/book_routes.js";
 import authRoutes from "./src/product/auth/routes/auth_routes.js";
 import mysqlConnection from "./src/core/connection/mysql.connection.js";
 import cors from "cors";
+import dotenv from "dotenv";
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+dotenv.config();
 app.use("/api/book", bookRoutes);
 app.use("/api/auth", authRoutes);
 

@@ -58,7 +58,9 @@ export function login(req, res, next) {
     (err, result) => {
       console.log(result);
       if (err) {
-        return res.status(400).json({ message: err.message });
+        return res
+          .status(400)
+          .json({ status: res.statusCode, message: err.message });
       }
       if (!result.length) {
         return res.status(400).json({

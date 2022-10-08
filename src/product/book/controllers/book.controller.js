@@ -16,7 +16,7 @@ export function getBooks(req, res) {
 //GET BOOKS BY LIMIT
 export function getBooksByPage(req, res) {
   const page = req.query.page; // Current Page
-  const limitCount = 5; // How many books in 1 time
+  const limitCount = 6; // How many books in 1 time
 
   mysqlConnection.query(
     `SELECT * FROM Books limit ${limitCount} offset ${(page - 1) * limitCount}`,
@@ -41,6 +41,22 @@ export function getBookById(req, res) {
       res.status(200).json(row);
     }
   );
+}
+//Get book By Name
+export function getBookByName(req, res) {
+  const name = req.query.name;
+  try {
+    mysqlConnection.query(
+      `
+      SELECT * FROM library.books where Name Like '%${name}%'
+      `,
+      (err, rows, fields) => {
+        res.status(200).json({ status: res.statusCode, rows });
+      }
+    );
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
 }
 export function createOrUpdateBook(req, res) {
   try {
@@ -93,4 +109,12 @@ export function deleteBookById(req, res) {
       res.send("Deleted successfully");
     }
   );
+}
+//
+export function getDatabaseData(req, res) {
+  mysqlConnection.query(`SELECT * FROM library_data`, (err, row, fields) => {
+    if (err) return console.log(err.message);
+    console.log(row);
+    res.status(200).json(row);
+  });
 }
